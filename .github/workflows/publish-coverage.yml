@@ -32,8 +32,12 @@ jobs:
         run: |
           pytest --cov=backend --cov=frontend --cov=scripts --cov-report=html:coverage_html tests/
 
-      - name: Show contents of coverage_html
-        run: ls -la coverage_html
+      - name: Ensure coverage_html exists
+        run: |
+          if [ ! -d "coverage_html" ]; then
+            echo "❌ coverage_html directory missing!"
+            exit 1
+          fi
         
       - name: Deploy coverage to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
