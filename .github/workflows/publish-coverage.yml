@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - origin/main
-      - origintrunk
+      - origin/trunk
 
 jobs:
   publish-coverage:
