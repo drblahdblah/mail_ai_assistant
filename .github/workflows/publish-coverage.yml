@@ -43,7 +43,11 @@ jobs:
             exit 1
           fi
           [ -f coverage_html/index.html ] && echo "✅ Found coverage_html/index.html" || (echo "❌ No index.htmln in coverage_html folder" && exit 1)
-        
+
+      - name: Ensure coverage_html has a dummy file for Git
+        run: |
+          touch coverage_html/.keep
+
       - name: Deploy coverage to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
