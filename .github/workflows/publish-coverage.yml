@@ -3,8 +3,8 @@ name: Publish Coverage to GitHub Pages
 on:
   push:
     branches:
-      - main
-      - master
+      - origin/main
+      - origintrunk
 
 jobs:
   publish-coverage:
