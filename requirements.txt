@@ -18,7 +18,7 @@ python-dateutil>=2.8.2
 gradio>=4.30.0
 
 # Agentic workflows & planners
-agentq>=0.0.4  # If using AgentQ + MCTS
+openai-agents>=0.2.3 # If using AgentQ + MCTS
 networkx>=3.2.1  # For search trees / MCTS
 
 # Miscellaneous
