@@ -1,6 +1,6 @@
 # Core libraries
 langchain>=0.1.20
-llama-index[embeddings-huggingface,vector-stores]>=0.10.32
+llama-index[embeddings-huggingface,vector-stores]==0.12.52
 faiss-cpu>=1.7.4
 
 # Local LLM via Ollama
