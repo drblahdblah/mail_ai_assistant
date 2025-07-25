@@ -1,26 +1,22 @@
-name: Publish Coverage to GitHub Pages
+name: Publish Coverage Report
 
 on:
   push:
     branches:
       - main
-      - trunk
 
 jobs:
   publish-coverage:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # Needed to push to gh-pages branch
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Fetch all history for gh-pages push
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -31,31 +27,16 @@ jobs:
       - name: Run tests and generate coverage
         run: |
           pytest --cov=backend --cov=frontend --cov=scripts --cov-report=html:coverage_html tests/
-          ls -la coverage_html
 
-      - name: Check contents of coverage_html
+      - name: Add .nojekyll and dummy file to ensure Git picks up the folder
         run: |
-          if [ -d coverage_html ]; then
-            echo "✅ coverage_html folder found. Contents:"
-            ls -l coverage_html
-          else
-            echo "❌ coverage_html folder is missing!"
-            exit 1
-          fi
-          [ -f coverage_html/index.html ] && echo "✅ Found coverage_html/index.html" || (echo "❌ No index.htmln in coverage_html folder" && exit 1)
-
-      - name: Ensure coverage_html has a dummy file for Git
-        run: |
+          touch coverage_html/.nojekyll
           touch coverage_html/.keep
 
-      - name: Deploy coverage to gh-pages branch
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./coverage_html
           publish_branch: gh-pages
-          force_orphan: true
           enable_jekyll: false
-          commit_message: "Publish coverage report from ${{ github.sha }}"
-          user_name: "github-actions[bot]"
-          user_email: "github-actions[bot]@users.noreply.github.com"
