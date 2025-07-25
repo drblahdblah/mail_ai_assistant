@@ -33,7 +33,7 @@ black
 pytest
 
 # For dev only
-[dev]
+# [dev]
 pytest
 ipython
 black
