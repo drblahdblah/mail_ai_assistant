@@ -2,9 +2,9 @@ name: Python CI/CD
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, trunk ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, trunk ]
 
 jobs:
   build-test-lint:
