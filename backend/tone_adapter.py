@@ -83,6 +83,6 @@ Now generate a reply to this new email, using a similar tone:
 if __name__ == '__main__':
     embed_and_save_tone_vectors()
 
-    new_email = \"\"\"Hi, are you still able to present at the Q3 planning session next Tuesday? Let me know so I can update the calendar.\"\"\"
+    new_email = """Hi, are you still able to present at the Q3 planning session next Tuesday? Let me know so I can update the calendar."""
     prompt = build_tone_prompt(new_email)
     print('--- Injected Prompt ---\n', prompt)
