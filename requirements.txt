@@ -1,0 +1,39 @@
+# Core libraries
+langchain>=0.1.20
+llama-index>=0.10.32
+faiss-cpu>=1.7.4
+
+# Local LLM via Ollama
+ollama>=0.1.6  # Python wrapper (if used)
+
+# Embeddings & tone modeling
+sentence-transformers>=2.2.2
+scikit-learn>=1.4.2
+
+# Email parsing & processing
+mail-parser>=3.15.0
+python-dateutil>=2.8.2
+
+# Gradio frontend
+gradio>=4.30.0
+
+# Agentic workflows & planners
+agentq>=0.0.4  # If using AgentQ + MCTS
+networkx>=3.2.1  # For search trees / MCTS
+
+# Miscellaneous
+tqdm>=4.66.2
+rich>=13.7.1
+pydantic>=2.7.1
+openai>=1.30.3  # Optional, if fallback needed
+
+# Dev tools
+ipython
+black
+pytest
+
+# For dev only
+[dev]
+pytest
+ipython
+black

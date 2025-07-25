@@ -1,0 +1,43 @@
+name: Publish Coverage to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  publish-coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Needed to push to gh-pages branch
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for gh-pages push
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests and generate coverage HTML
+        run: |
+          pytest --cov=backend --cov=frontend --cov=scripts --cov-report=html:coverage_html tests/
+
+      - name: Deploy coverage to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage_html
+          publish_branch: gh-pages
+          commit_message: "Publish coverage report from ${{ github.sha }}"
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
