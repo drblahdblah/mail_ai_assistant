@@ -41,6 +41,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./coverage_html
           publish_branch: gh-pages
+          force_orphan: true         # <-- this line is the fix
           commit_message: "Publish coverage report from ${{ github.sha }}"
           user_name: "github-actions[bot]"
           user_email: "github-actions[bot]@users.noreply.github.com"
