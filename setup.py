@@ -4,8 +4,8 @@ setup(
     name='email_ai_assistant',
     version='0.1.0',
     description='Local AI Email Assistant with RAG, Ollama, and LangChain',
-    author='Your Name',
-    author_email='you@example.com',
+    author='David Jones',
+    author_email='drblahdblah@gmail.com',
     packages=find_packages(include=['backend', 'backend.*', 'frontend', 'frontend.*', 'scripts', 'scripts.*']),
     python_requires='>=3.10',
     install_requires=[
