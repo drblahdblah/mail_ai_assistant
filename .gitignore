@@ -1,0 +1,30 @@
+# Ignore email raw data (e.g., .emlx files)
+# Assuming you keep raw emails somewhere inside your project folder (if at all)
+**/*.emlx
+data/
+emails/
+email_data/
+
+# Ignore vector stores and embeddings folders
+# Adjust folder names if different
+vector_index/
+vector_store/
+user_embeddings/
+indexes/
+index_builder.cache/
+
+# Ignore the models directory
+models/
+
+# Ignore local runtime or cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore coverage reports (optional)
+coverage_html/
+
+# Ignore environment files and secrets
+.env
+.env.local
+*.secret
