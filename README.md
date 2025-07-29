@@ -44,18 +44,6 @@ make run        # Runs the AI decision + drafting pipeline
 make ui         # Launches the Gradio UI
 ```
 
-### 2. Using Pyproject.toml and setup.pt
-
-🧑‍💻 How to install & develop
-# From the root directory (where setup.py & pyproject.toml live)
-```bash pip install -e . ```
-
-You can then run:
-```bash 
-email-ai-ingest
-email-ai-run
-email-ai-ui
-```
 ---
 
 ## 🧰 Project Structure
@@ -133,7 +121,7 @@ All data is stored and processed **locally**:
 
 ## 🧑‍💻 Author
 
-Built by [Your Name](https://github.com/yourname).
+Built by [David Jones](https://github.com/drblahdblah).
 Inspired by the idea of **local-first AI** tools that prioritize privacy and productivity.
 
 ---
