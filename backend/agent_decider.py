@@ -5,7 +5,7 @@ Agent Q + MCTS based logic to decide if reply is needed
 import requests
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "llama3"  # or mistral, phi, etc.
+OLLAMA_MODEL = "llama3.2"  # or mistral, phi, etc.
 
 DECISION_PROMPT_TEMPLATE = """
 You are an assistant helping a user triage their emails. Based on the content of the email below, determine whether the user should reply, archive, or reply later.

@@ -17,8 +17,9 @@ def process_email(email_path: Path):
         email_data = json.load(f)
 
     email_text = f"From: {email_data.get('from')}\nSubject: {email_data.get('subject')}\n\n{email_data.get('body')}"
-    print(f"\n🔍 Processing: {email_data.get('subject')[:50]}...")
-
+    subject = email_data.get('subject') or "[No Subject]"
+    print(f"\n🔍 Processing: {subject[:50]}...")
+    
     # Step 1: Decide whether to reply
     decision = decide_reply_action(email_text)
     print(f"🤖 Decision: {decision['action']} | Reason: {decision['reason']}")

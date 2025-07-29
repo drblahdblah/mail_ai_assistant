@@ -17,15 +17,33 @@ TONE_VECTOR_STORE = Path('data/user_embeddings/replies.json')
 def load_past_replies_for_embedding() -> list[dict]:
     replies = []
     raw_dir = Path('data/raw_emails')
+
     for file in raw_dir.glob('*.json'):
-        with open(file, 'r') as f:
-            email = json.load(f)
-            if email.get('from', '').startswith('me@') or 'your_email.com' in email.get('from', ''):
-                replies.append({
-                    'text': email.get('body'),
-                    'metadata': {'date': email.get('date'), 'subject': email.get('subject')}
-                })
+        with open(file, 'r', encoding='utf-8') as f:
+            try:
+                email = json.load(f)
+            except json.JSONDecodeError:
+                continue
+
+            sender = email.get('from') or ''  # ensure it's a string, even if missing
+
+            if (
+                sender.startswith('me@') or
+                'davidjones42@icloud.com' in sender or
+                'drblahdblah@gmail.com' in sender
+            ):
+                body = email.get('body') or ''
+                if body.strip():  # only add non-empty replies
+                    replies.append({
+                        'text': body,
+                        'metadata': {
+                            'date': email.get('date'),
+                            'subject': email.get('subject'),
+                        }
+                    })
+
     return replies
+
 
 
 def embed_and_save_tone_vectors():

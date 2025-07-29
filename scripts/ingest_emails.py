@@ -11,21 +11,41 @@ from email.parser import BytesParser
 from tqdm import tqdm
 
 # Customize to your Mail version
-MAIL_BASE_DIR = os.path.expanduser('~/Library/Mail/V10')  # V10 or V9 depending on macOS
+MAIL_BASE_DIR = os.path.expanduser('/Users/davidjones/Library/Mail/V10')  # V10 or V9 depending on macOS
 OUTPUT_DIR = Path('data/raw_emails')
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def parse_emlx_file(file_path):
     with open(file_path, 'rb') as f:
         try:
-            msg = BytesParser(policy=policy.default).parse(f)
+            # Read the first line to get the byte count
+            first_line = f.readline()
+            byte_count = int(first_line.strip())
+            
+            # Read the actual email content (next byte_count bytes)
+            email_content = f.read(byte_count)
+            
+            # Parse the email content
+            msg = BytesParser(policy=policy.default).parsebytes(email_content)
+            
+            # Extract body content
+            body = ""
+            if msg.is_multipart():
+                body_part = msg.get_body(preferencelist=('plain', 'html'))
+                if body_part:
+                    body = body_part.get_content()
+            else:
+                body = msg.get_payload(decode=True)
+                if isinstance(body, bytes):
+                    body = body.decode('utf-8', errors='ignore')
+            
             return {
                 'subject': msg.get('subject'),
                 'from': msg.get('from'),
                 'to': msg.get('to'),
                 'date': msg.get('date'),
-                'body': msg.get_body(preferencelist=('plain', 'html')).get_content() if msg.is_multipart() else msg.get_payload(),
-                'raw': msg.as_string()
+                'body': body,
+                'raw': email_content.decode('utf-8', errors='ignore')
             }
         except Exception as e:
             print(f'Error parsing {file_path}: {e}')

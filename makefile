@@ -18,12 +18,12 @@ tone:
 # Run full decision + draft pipeline on a few recent emails
 run:
 	@echo "🤖 Running full pipeline on emails..."
-	python scripts/run_local_app.py
+	PYTHONPATH=. python scripts/run_local_app.py
 
 # Launch Gradio frontend UI
 ui:
 	@echo "🖥️  Launching Gradio UI..."
-	python frontend/ui.py
+	PYTHONPATH=. python frontend/ui.py
 
 # Clean all generated data (careful!)
 clean:

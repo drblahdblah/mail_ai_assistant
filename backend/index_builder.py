@@ -1,24 +1,23 @@
-"""
- Indexes emails with LlamaIndex
-"""
 import os
 import json
 from pathlib import Path
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext
-from llama_index.core.schema import Document
-from llama_index.vector_stores.faiss import FaissVectorStore
+import faiss
+
+from llama_index.core import VectorStoreIndex, Document
+from llama_index.core.storage import StorageContext
 from llama_index.core.node_parser import SimpleNodeParser
-from llama_index.core import ServiceContext, set_global_service_context
-from llama_index.embeddings.openai import OpenAIEmbedding  # Replace if using local embeddings
+from llama_index.vector_stores.faiss import FaissVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.core.settings import Settings
 
 # --- Configuration ---
 RAW_EMAIL_DIR = Path('data/raw_emails')
 INDEX_DIR = Path('data/vector_index')
 INDEX_DIR.mkdir(parents=True, exist_ok=True)
 
-# Choose an embedding model (Ollama-compatible via HuggingFace or sentence-transformers)
+# --- Embedding Setup (offline) ---
 EMBEDDING_MODEL = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+Settings.embed_model = EMBEDDING_MODEL  # MUST be set early
 
 
 def load_emails_as_documents():
@@ -38,32 +37,32 @@ def load_emails_as_documents():
 
 
 def build_and_save_index(documents):
-    # Setup embedding + service context
-    service_context = ServiceContext.from_defaults(embed_model=EMBEDDING_MODEL)
-    set_global_service_context(service_context)
-
-    # Parse text into nodes (optional chunking)
-    parser = SimpleNodeParser.from_defaults()
+    # Convert to nodes
+    parser = SimpleNodeParser()
     nodes = parser.get_nodes_from_documents(documents)
 
-    # Create and save FAISS index
-    vector_store = FaissVectorStore()
-    storage_context = StorageContext.from_defaults(vector_store=vector_store)
-    index = VectorStoreIndex(nodes, storage_context=storage_context)
+    # Determine embedding dimension
+    dim = len(EMBEDDING_MODEL.get_text_embedding("dummy"))
 
-    # Persist the index
+    # Build FAISS index
+    faiss_index = faiss.IndexFlatL2(dim)
+    vector_store = FaissVectorStore(faiss_index=faiss_index)
+    storage_context = StorageContext.from_defaults(vector_store=vector_store)
+
+    # Build index
+    index = VectorStoreIndex(nodes, storage_context=storage_context)
     index.storage_context.persist(persist_dir=str(INDEX_DIR))
-    print(f'Index saved to {INDEX_DIR}')
+    print(f"✅ Index saved to {INDEX_DIR}")
 
 
 def main():
-    print('Loading parsed emails...')
+    print("📥 Loading parsed emails...")
     docs = load_emails_as_documents()
-    print(f'Loaded {len(docs)} documents.')
-    
-    print('Building and saving vector index...')
+    print(f"📄 Loaded {len(docs)} documents")
+
+    print("⚙️ Building and saving vector index...")
     build_and_save_index(docs)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
